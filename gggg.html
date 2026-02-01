@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$D E A D – Memecoins Are Dead</title>
+  <meta name="description" content="Memecoins are dead. Welcome to the funeral."/>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #0a0a0a 0%, #180000 50%, #000000 100%);
+      color: #eee;
+      font-family: 'Orbitron', system-ui, sans-serif;
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='26' font-size='26'>💀</text></svg>") 16 16, auto;
+    }
+
+    /* Overlay grid + vignette */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(255,0,51,0.025) 2px, rgba(255,0,51,0.025) 4px),
+        repeating-linear-gradient(90deg, transparent 0px, transparent 2px, rgba(255,0,51,0.025) 2px, rgba(255,0,51,0.025) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, transparent 0%, #0008 70%, #000c 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .blood { color: #ff0033; text-shadow: 0 0 20px #ff003366; }
+
+    .creep { font-family: 'Creepster', cursive; }
+
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 30;
+      min-height: 100vh;
+      padding: clamp(40px, 8vw, 80px) 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 3vh;
+    }
+
+    h1 {
+      font-size: clamp(4.5rem, 14vw, 11rem);
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.1em;
+    }
+
+    .subtitle {
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      opacity: 0.92;
+    }
+
+    .main-text {
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      line-height: 1.55;
+      max-width: 720px;
+      opacity: 0.88;
+      margin: 4vh 0;
+    }
+
+    .rotating {
+      font-size: clamp(2rem, 6.5vw, 3.6rem);
+      font-weight: 700;
+      transition: all 0.4s ease;
+    }
+
+    .rotating.fade {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+
+    .welcome {
+      font-size: clamp(2.4rem, 7.5vw, 5.2rem);
+      margin: 2vh 0 6vh;
+    }
+
+    .contract-box {
+      background: rgba(10,10,10,0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ff003344;
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      max-width: 100%;
+      margin: 3vh 0;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: monospace;
+      font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+      word-break: break-all;
+    }
+
+    .contract-box:hover,
+    .contract-box:active {
+      background: rgba(40,0,10,0.5);
+      box-shadow: 0 0 30px #ff003344;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      width: 100%;
+      max-width: 420px;
+      margin: 2vh 0 8vh;
+    }
+
+    .btn {
+      padding: 1.1rem;
+      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .btn-buy {
+      background: #ff0033cc;
+      border: 2px solid #ff0033;
+      color: white;
+      box-shadow: 0 0 20px #ff003366;
+    }
+
+    .btn-buy:hover {
+      background: #ff0033;
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px #ff003399;
+    }
+
+    .btn-other {
+      background: rgba(30,30,30,0.7);
+      border: 1.5px solid #555;
+      color: #ddd;
+    }
+
+    .btn-other:hover {
+      background: rgba(50,50,50,0.9);
+      border-color: #777;
+    }
+
+    /* Footer Styles */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      z-index: 30;
+      position: relative;
+      width: 100%;
+    }
+
+    .social-links {
+      margin-bottom: 10px;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      display: inline-block;
+    }
+
+    .social-links img {
+      width: 28px;
+      height: 28px;
+      filter: invert(1);
+      transition: transform 0.2s ease;
+    }
+
+    .social-links img:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-text {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* ── Floating Tweets ──────────────────────────────────────── */
+    #tweet-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;               /* BEHIND everything important */
+      overflow: hidden;
+    }
+
+    .tweet {
+      position: absolute;
+      left: 50%;
+      width: clamp(260px, 82vw, 340px);
+      background: rgba(20, 32, 43, 0.78);
+      backdrop-filter: blur(6px);
+      border: 1px solid #ff003322;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 30px #000c;
+      color: #eee;
+      font-size: 0.94rem;
+      transform: translateX(-50%);
+      animation: float-up linear forwards;
+      pointer-events: auto;
+    }
+
+    .tweet-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tweet-avatar {
+      width: 44px;
+      height: 44px;
+      background: #ff0033;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .tweet-name { font-weight: 700; }
+    .tweet-handle { color: #8899a6; font-size: 0.88rem; }
+
+    .tweet-text {
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .tweet-time {
+      color: #8899a6;
+      font-size: 0.82rem;
+    }
+
+    @keyframes float-up {
+      0%   { transform: translateX(-50%) translateY(110vh) rotate(var(--start-rot)); opacity: 0; }
+      12%  { opacity: 0.85; }
+      88%  { opacity: 0.85; }
+      100% { transform: translateX(-50%) translateY(-140vh) translateX(var(--drift)) rotate(var(--rot)); opacity: 0; }
+    }
+
+    @media (min-width: 640px) {
+      .buttons { flex-direction: row; justify-content: center; flex-wrap: wrap; gap: 2rem; }
+      .btn { width: auto; min-width: 260px; padding: 1.2rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="tweet-container"></div>
+
+<div class="container">
+  <div>
+    <h1 class="blood creep">$DEAD</h1>
+    <div class="subtitle creep">Memecoins Are Dead</div>
+  </div>
+
+  <div class="main-text">
+    Every time someone says<br>
+    <span id="rotating" class="blood rotating">"memecoins are dead"</span><br><br>
+    they instantly become part of the $DEAD community.
+  </div>
+
+  <div class="welcome creep blood">Welcome to the funeral.</div>
+
+  <div class="contract-box" onclick="copyCA()">
+    <span style="color:#ff6666; font-weight:bold; margin-right:8px;">CA:</span>
+    <span id="ca">So1anaContractAddressGoesHere1234567890abcdef</span>
+  </div>
+
+  <div class="buttons">
+    <a href="#" class="btn btn-buy">BUY $DEAD</a>
+    <a href="#" class="btn btn-other">JOIN FUNERAL</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="social-links">
+    <a href="https://x.com/YourHandle" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" /></a>
+    <a href="https://t.me/YourTelegram" target="_blank"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/telegram.svg" alt="Telegram" /></a>
+    <a href="https://dexscreener.com/solana/YourToken" target="_blank"><img src="https://dexscreener.com/favicon.ico" alt="Dexscreener" /></a>
+  </div>
+  <p class="footer-text">© 2026 $DEAD • Built on Solana • Pump.fun Launch</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+// Particles ────────────────────────────────────────────────
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 45, density: { enable: true, value_area: 800 } },
+    color: { value: "#ff0033" },
+    shape: { type: "circle" },
+    opacity: { value: 0.28, random: true },
+    size: { value: 3.5, random: true },
+    line_linked: { enable: false },
+    move: { enable: true, speed: 0.7, direction: "none", random: true, out_mode: "out" }
+  },
+  interactivity: { detect_on: "canvas", events: { onhover: { enable: false } } },
+  retina_detect: true
+});
+
+// Rotating phrase
+const phrases = [
+  "memecoins are dead",
+  "memecoins are cooked",
+  "memecoins are over",
+  "memecoins are finished",
+  "memecoins are toast",
+  "memecoin season is done"
+];
+
+let idx = 0;
+const rotEl = document.getElementById("rotating");
+
+window.addEventListener("scroll", () => {
+  if (Math.abs(window.scrollY - (window.lastY||0)) > 90) {
+    rotEl.classList.add("fade");
+    setTimeout(() => {
+      idx = (idx + 1) % phrases.length;
+      rotEl.textContent = `"${phrases[idx]}"`;
+      rotEl.classList.remove("fade");
+    }, 350);
+    window.lastY = window.scrollY;
+  }
+});
+
+// Copy CA
+function copyCA() {
+  const caText = document.getElementById("ca").textContent;
+  const label = document.querySelector(".contract-box span:first-child");
+  const box = document.querySelector(".contract-box");
+
+  navigator.clipboard.writeText(caText).then(() => {
+    // Visual feedback: Change text
+    const originalText = label.textContent;
+    label.textContent = "COPIED:";
+    label.style.color = "#00ff66"; // Change to green for success
+    
+    // Background feedback
+    box.style.background = "rgba(0, 80, 0, 0.4)";
+    box.style.borderColor = "#00ff66";
+
+    // Revert back after 1.5 seconds
+    setTimeout(() => {
+      label.textContent = originalText;
+      label.style.color = "#ff6666";
+      box.style.background = "";
+      box.style.borderColor = "";
+    }, 1500);
+  });
+}
+
+// Floating tweets
+const tweets = [
+  {a:"💀", n:"CryptoReaper", h:"@CryptoReaperX", t:"memecoins are officially dead. pack it up boys, it's over 💀", time:"2h"},
+  {a:"🪦", n:"GraveWatcher", h:"@GraveWatcher", t:"Just sold everything. They're cooked. RIP 2024–2025.", time:"4h"},
+  {a:"🔥", n:"BurnNotice", h:"@BurnNotice", t:"memecoin season is OVER. still holding? ngmi", time:"5h"},
+  {a:"⚰️", n:"FuneralDir", h:"@MemecoinFuneral", t:"Beautiful service today. Rest in peace memecoins 🪦", time:"7h"},
+  {a:"🧠", n:"ColdHands", h:"@ColdHandsCrypto", t:"memecoins are dead and honestly… good riddance", time:"9h"},
+  {a:"🍞", n:"ToastLord", h:"@ToastLord", t:"they said to the moon… now they're toast 🍞", time:"11h"}
+];
+
+const tweetCont = document.getElementById("tweet-container");
+
+function spawnTweet() {
+  const t = tweets[Math.floor(Math.random()*tweets.length)];
+  const el = document.createElement("div");
+  el.className = "tweet";
+
+  const drift = (Math.random()-0.5)*240;
+  const startRot = (Math.random()-0.5)*16;
+  const endRot = startRot + (Math.random()-0.5)*24;
+  const dur = 16 + Math.random()*14;
+
+  el.style.setProperty("--drift", drift+"px");
+  el.style.setProperty("--start-rot", startRot+"deg");
+  el.style.setProperty("--rot", endRot+"deg");
+  el.style.animationDuration = dur+"s";
+  el.style.left = (Math.random()*80 + 10)+"%";
+
+  el.innerHTML = `
+    <div class="tweet-header">
+      <div class="tweet-avatar">${t.a}</div>
+      <div>
+        <div class="tweet-name">${t.n}</div>
+        <div class="tweet-handle">${t.h}</div>
+      </div>
+    </div>
+    <div class="tweet-text">${t.t}</div>
+    <div class="tweet-time">${t.time}</div>
+  `;
+
+  tweetCont.appendChild(el);
+
+  el.addEventListener("animationend", () => el.remove());
+}
+
+// Initial burst + continuous spawn
+for(let i=0; i<6; i++) setTimeout(spawnTweet, i*1800 + Math.random()*800);
+setInterval(spawnTweet, 5200);
+</script>
+</body>
+</html>
